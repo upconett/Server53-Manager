@@ -10,8 +10,8 @@ class ElyByMessage(Filter):
 
     async def __call__(self, message: Message) -> bool:
         user = message.from_user
-        nick = await logic.get_nick(user)
-        return self.registered == (nick is not None)
+        u = await logic.get_user_data(user)
+        return self.registered == ((u.nick if u else u) is not None)
 
 
 class ElyByCallback(Filter):
@@ -20,5 +20,5 @@ class ElyByCallback(Filter):
 
     async def __call__(self, query: CallbackQuery) -> bool:
         user = query.from_user
-        nick = await logic.get_nick(user)
-        return self.registered == (nick is not None)
+        u = await logic.get_user_data(user)
+        return self.registered == ((u.nick if u else u) is not None)

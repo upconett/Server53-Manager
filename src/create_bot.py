@@ -10,7 +10,7 @@ def_props = DefaultBotProperties(
 )
 
 bot = Bot(
-    token=config.TOKEN, 
+    token=config.BOT_TOKEN, 
     default=def_props
 )
 dp = Dispatcher(

@@ -1,7 +1,45 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import LabeledPrice
+from aiogram.methods.create_invoice_link import CreateInvoiceLink
+
+from create_bot import bot
+from const import elyby_url
 
 
-def elyby_login():
+elyby_login = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='ElyBy', url=elyby_url, callback_data='login')]
+])
+
+
+main_menu = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text='ImageMaps 🌄')],
+    [KeyboardButton(text='О нас ⚒️')],
+    [KeyboardButton(text='Подержи 🍺')],
+], resize_keyboard=True)
+
+
+async def donation() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
-    kb.button(text='ElyBy', url="https://account.ely.by/oauth2/v1?client_id=server53bot&redirect_uri=https://t.me/test_work_upco_bot&response_type=code&scope=account_info")
+    async def invoice(currency: int):
+        prices = [LabeledPrice(label="XTR", amount=currency)]
+        return await bot(
+            CreateInvoiceLink(
+                title="Поддержка 🍺",
+                description="Поддержи проект Server53",
+                prices=prices,
+                provider_token="",
+                payload="donation",
+                currency="XTR",
+            )
+        )
+    kb.button(text='Поддержать | 25 ⭐', url=await invoice(1))
+    kb.button(text='Вернуться', callback_data='back')
+    kb.adjust(1, repeat=True)
     return kb.as_markup()
+    
+
+back = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='Вернуться', callback_data='back')]
+])

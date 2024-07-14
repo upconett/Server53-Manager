@@ -1,6 +1,8 @@
-from aiogram import Router
+from aiogram import Router, F
 from aiogram.types import *
 from aiogram.filters import *
+from aiogram.fsm.context import FSMContext
+from typing import List
 
 from create_bot import bot
 from utils.filters import ElyByMessage, ElyByCallback
@@ -14,14 +16,52 @@ router.message.filter(ElyByMessage(False))
 router.callback_query.filter(ElyByCallback(False))
 
 
-async def message_start(message: Message):
+@router.message(CommandStart())
+async def message_start(message: Message, state: FSMContext):
     user = message.from_user
     await logic.update_user(user)
 
-    await message.answer(
+    data = await state.get_data()
+    await logic.delete_extra(user, data)
+    await state.clear()
+
+    if 'login_' in message.text:
+        try:
+            uuid, nick = logic.extract_uuid_nick(message.text)
+            await logic.authorize_user(user, uuid, nick)
+            await message.answer(
+                text=ms.start_logged(nick),
+                reply_markup=kb.main_menu,
+                parse_mode='MarkdownV2'
+            )
+            await message.delete()
+        except Exception as e:
+            print(e)
+            ms_login = await message.answer(
+                text=ms.start_unreg(user),
+                reply_markup=kb.elyby_login
+            )
+            await state.set_data({'start_login_id': ms_login.message_id})
+
+    else:
+        ms_login = await message.answer(
+            text=ms.start_unreg(user),
+            reply_markup=kb.elyby_login
+        )
+        await state.set_data({'start_login_id': ms_login.message_id})
+
+    
+@router.message()
+async def message_unreg(message: Message, state: FSMContext):
+    user = message.from_user
+    await logic.update_user(user)
+
+    data = await state.get_data()
+    await state.clear()
+
+    ms_login = await message.answer(
         text=ms.start_unreg(user),
-        reply_markup=kb.elyby_login()
+        reply_markup=kb.elyby_login
     )
-
-
-router.message.register(message_start, CommandStart())
+    await message.delete()
+    await state.set_data({'start_login_id': ms_login.message_id})

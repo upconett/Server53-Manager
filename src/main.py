@@ -1,7 +1,7 @@
 import asyncio
 
 from create_bot import bot, dp
-from routers import core_unreg, core_reg
+from routers import core_unreg, core_reg, images, donation
 from database import base as db
 
 
@@ -21,7 +21,9 @@ async def main():
 
     dp.include_routers(
         core_unreg,
-        core_reg
+        core_reg,
+        images,
+        donation
     )
 
     await bot.delete_webhook(drop_pending_updates=True)
@@ -30,5 +32,5 @@ async def main():
 
 if __name__ == '__main__':
     try: asyncio.run(main())
-    except KeyboardInterrupt: pass
+    except KeyboardInterrupt: asyncio.run(bot.session.close())
 

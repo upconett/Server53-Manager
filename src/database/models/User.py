@@ -13,6 +13,7 @@ class User(BaseModel):
     first_name: Mapped[str | None]
     last_name: Mapped[str | None]
 
+    uuid: Mapped[str | None]
     nick: Mapped[str | None]
 
 
@@ -30,7 +31,8 @@ class User(BaseModel):
         self.last_name = user.last_name
 
 
-    async def set_nick(self, nick: str) -> None:
+    async def authorize(self, uuid: str, nick: str) -> None:
+        self.uuid = uuid
         self.nick = nick
 
 
