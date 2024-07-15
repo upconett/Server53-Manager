@@ -1,17 +1,23 @@
 import asyncio
 
 from create_bot import bot, dp, rcon
+from utils import AccessChecker
 from routers import core_unreg, core_reg, images, access, donation
 from database import base as db
+
+
+ac = AccessChecker(frequency=4) # Бот будет проверять проходку каждые 4 часа
 
 
 async def onstartup():
     await db.check_tables()
     bot_user = await bot.get_me()
+    ac.start()
     print(f'{bot_user.full_name} [@{bot_user.username}] up and running | 🌄')
 
 
 async def onshutdown():
+    ac.stop()
     print('Shutting down... | 💤')
 
 
@@ -29,6 +35,7 @@ async def main():
         access,
         donation
     )
+
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

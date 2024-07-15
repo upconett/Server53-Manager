@@ -3,7 +3,6 @@ from aiogram.types import *
 from aiogram.filters import *
 from aiogram.fsm.context import FSMContext
 
-from create_bot import bot
 from logic import core as logic
 from messages import core as ms
 from keyboards import core as kb
@@ -100,5 +99,4 @@ async def message_access(message: Message, state: FSMContext):
 async def query_back(query: CallbackQuery):
     user = query.from_user
     await logic.update_user(user)
-
     await query.message.delete()

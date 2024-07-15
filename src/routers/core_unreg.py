@@ -1,10 +1,8 @@
-from aiogram import Router, F
+from aiogram import Router
 from aiogram.types import *
 from aiogram.filters import *
 from aiogram.fsm.context import FSMContext
-from typing import List
 
-from create_bot import bot
 from utils.filters import ElyByMessage, ElyByCallback
 
 from logic import core as logic
