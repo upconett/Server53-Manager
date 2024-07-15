@@ -4,6 +4,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 import config
 from minecraft import MCRcon
+from utils import AccessChecker
 
 
 def_props = DefaultBotProperties(
@@ -23,3 +24,8 @@ rcon = MCRcon(
     port=config.RCON_PORT,
     password=config.RCON_PASSWORD
 )
+
+ac = AccessChecker(
+    bot=bot, rcon=rcon,
+    frequency=config.ACCESS_CHECK_FREQUENCY
+) 

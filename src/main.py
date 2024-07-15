@@ -1,12 +1,10 @@
 import asyncio
 
-from create_bot import bot, dp, rcon
-from utils import AccessChecker
+from create_bot import bot, dp, rcon, ac
 from routers import core_unreg, core_reg, images, access, donation
 from database import base as db
 
 
-ac = AccessChecker(frequency=4) # Бот будет проверять проходку каждые 4 часа
 
 
 async def onstartup():
