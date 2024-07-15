@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from database.models import User as UserDB
+from datetime import datetime
 
 
 @dataclass
@@ -12,6 +13,8 @@ class User:
     uuid: str | None
     nick: str | None
 
+    whitelisted_till: datetime | None
+
     def __init__(self, user: UserDB):
         self.id = user.id
         self.first_name = user.first_name
@@ -20,3 +23,5 @@ class User:
 
         self.uuid = user.uuid
         self.nick = user.nick
+
+        self.whitelisted_till = user.whitelisted_till

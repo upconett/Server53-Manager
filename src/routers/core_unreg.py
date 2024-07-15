@@ -30,7 +30,7 @@ async def message_start(message: Message, state: FSMContext):
             uuid, nick = logic.extract_uuid_nick(message.text)
             await logic.authorize_user(user, uuid, nick)
             await message.answer(
-                text=ms.start_logged(nick),
+                text=ms.start_logged(nick, None),
                 reply_markup=kb.main_menu,
                 parse_mode='MarkdownV2'
             )

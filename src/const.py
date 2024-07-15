@@ -1,5 +1,5 @@
 env_variables = [
-    'BOT_TOKEN', 'BOT_USERNAME', 'DBFILE', 'IMAGES_PATH'
+    'BOT_TOKEN', 'BOT_USERNAME', 'DBFILE', 'IMAGEMAPS_PATH', 'RCON_HOST', 'RCON_PORT', 'RCON_PASSWORD'
 ]
 
 md_chars = [

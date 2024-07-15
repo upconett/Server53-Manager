@@ -1,7 +1,7 @@
 import asyncio
 
-from create_bot import bot, dp
-from routers import core_unreg, core_reg, images, donation
+from create_bot import bot, dp, rcon
+from routers import core_unreg, core_reg, images, access, donation
 from database import base as db
 
 
@@ -19,10 +19,14 @@ async def main():
     dp.startup.register(onstartup)
     dp.shutdown.register(onshutdown)
 
+    try: await rcon.client.connect(); await rcon.client.close()
+    except: print("Minecraft RCON connection failed, check .env")
+
     dp.include_routers(
         core_unreg,
         core_reg,
         images,
+        access,
         donation
     )
 

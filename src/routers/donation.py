@@ -11,7 +11,7 @@ from keyboards import core as kb
 router = Router(name='donation')
 
 
-@router.pre_checkout_query()
+@router.pre_checkout_query(F.invoice_payload.endswith('donation'))
 async def pre_checkout(pre_checkout_query: PreCheckoutQuery, state: FSMContext):
     await pre_checkout_query.answer(ok=True)
 

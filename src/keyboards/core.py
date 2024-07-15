@@ -9,14 +9,15 @@ from const import elyby_url
 
 
 elyby_login = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text='ElyBy', url=elyby_url, callback_data='login')]
+    [InlineKeyboardButton(text='Авторизоваться в Ely.by', url=elyby_url, callback_data='login')]
 ])
 
 
 main_menu = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text='Домой 🏠')],
+    [KeyboardButton(text='Проходка 🗝️')],
     [KeyboardButton(text='ImageMaps 🌄')],
-    [KeyboardButton(text='О нас ⚒️')],
-    [KeyboardButton(text='Подержи 🍺')],
+    [KeyboardButton(text='О нас ⚒️'), KeyboardButton(text='Подержи 🍺')],
 ], resize_keyboard=True)
 
 
@@ -38,6 +39,27 @@ async def donation() -> InlineKeyboardMarkup:
     kb.button(text='Вернуться', callback_data='back')
     kb.adjust(1, repeat=True)
     return kb.as_markup()
+
+
+async def access() -> InlineKeyboardMarkup:
+    kb = InlineKeyboardBuilder()
+    async def invoice(currency: int):
+        prices = [LabeledPrice(label="XTR", amount=currency)]
+        return await bot(
+            CreateInvoiceLink(
+                title="1 Месяц 🗝️",
+                description="Проходка на Server53",
+                prices=prices,
+                provider_token="",
+                payload="1_month_access",
+                currency="XTR",
+            )
+        )
+    kb.button(text='1 Месяц | 15 ⭐', url=await invoice(1))
+    kb.button(text='Вернуться', callback_data='back')
+    kb.adjust(1, repeat=True)
+    return kb.as_markup()
+
     
 
 back = InlineKeyboardMarkup(inline_keyboard=[
