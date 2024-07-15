@@ -6,6 +6,7 @@ from aiogram.fsm.context import FSMContext
 from logic import core as logic
 from messages import core as ms
 from keyboards import core as kb
+from keyboards import about as about_kb
 from utils.filters import ElyByCallback, ElyByMessage
 
 router = Router(name='core_reg')
@@ -56,7 +57,7 @@ async def message_about_us(message: Message, state: FSMContext):
 
     await message.answer(
         text=ms.about_us,
-        reply_markup=kb.back
+        reply_markup=about_kb.main('about_main')
     )
     await message.delete()
 

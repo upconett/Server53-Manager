@@ -1,7 +1,7 @@
 import asyncio
 
 from create_bot import bot, dp, rcon, ac
-from routers import core_unreg, core_reg, images, access, donation
+from routers import core_unreg, core_reg, about, images, access, donation
 from database import base as db
 
 
@@ -29,6 +29,7 @@ async def main():
     dp.include_routers(
         core_unreg,
         core_reg,
+        about,
         images,
         access,
         donation
