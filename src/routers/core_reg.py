@@ -15,7 +15,7 @@ router.callback_query.filter(ElyByCallback(True))
 
 
 @router.message(F.text == 'Домой 🏠')
-@router.message(CommandStart())
+@router.message(Command('start', 'help'))
 async def message_start(message: Message, state: FSMContext):
     user = message.from_user
     await logic.update_user(user)
