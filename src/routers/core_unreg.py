@@ -16,7 +16,7 @@ router.message.filter(ElyByMessage(False))
 router.callback_query.filter(ElyByCallback(False))
 
 
-@router.message(CommandStart())
+@router.message(Command('start', 'help'))
 async def message_start(message: Message, state: FSMContext):
     user = message.from_user
     await logic.update_user(user)
@@ -48,6 +48,7 @@ async def message_start(message: Message, state: FSMContext):
             reply_markup=kb.elyby_login
         )
         await state.set_data({'start_login_id': ms_login.message_id})
+        await message.delete()
 
     
 @router.message()
