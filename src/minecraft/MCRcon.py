@@ -12,25 +12,19 @@ class Whitelist:
         self.client = client
 
     async def get(self) -> list:
-        await self.client.connect()
         response = await self.client.send_cmd('whitelist list')
-        await self.client.close()
         whitelist = self.__parse_whitelist(response[0])
         return whitelist
 
     async def add(self, nick: str) -> bool:
-        await self.client.connect()
         response = await self.client.send_cmd(f'whitelist add {nick}')
-        await self.client.close()
         if 'add.failed' in response[0]:
             return False
         else:
             return True
 
     async def remove(self, nick: str) -> bool:
-        await self.client.connect()
         response = await self.client.send_cmd(f'whitelist remove {nick}')
-        await self.client.close()
         if 'remove.failed' in response[0]:
             return False
         else:
@@ -48,6 +42,8 @@ class MCRcon:
             port=port,
             password=password
         )
+
+        self.whitelist = Whitelist(self.client)
 
     async def connect(self):
         await self.client.connect()
@@ -69,3 +65,8 @@ class MCRcon:
     async def tell(self, who: str, message: str) -> str:
         response = await self.client.send_cmd(f'tell {who} {message}')
         return response[0]
+
+    async def list(self) -> list[str]:
+        response = (await self.client.send_cmd('list'))[0]
+        response = ': '.join(response.replace('\n', '').split(': ')[1:])
+        return response.split(', ')

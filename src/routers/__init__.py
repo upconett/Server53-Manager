@@ -1,3 +1,4 @@
+from routers.admin import router as admin
 from routers.core_unreg import router as core_unreg
 from routers.core_reg import router as core_reg
 from routers.about import router as about

@@ -3,7 +3,7 @@ import asyncio
 
 # Локальные модули
 from create_bot import bot, dp, rcon, ac
-from routers import core_unreg, core_reg, about, images, access, donation
+from routers import admin, core_unreg, core_reg, about, images, access, donation
 from database import base as db
 
 
@@ -16,6 +16,7 @@ async def onstartup():
 
 
 async def onshutdown():
+    await rcon.client.close()
     ac.stop()
     print('Shutting down... | 💤')
 
@@ -27,11 +28,11 @@ async def main():
 
     try:
         await rcon.client.connect()
-        await rcon.client.close()
     except:
         print("Minecraft RCON connection failed, check .env")
 
     dp.include_routers(
+        admin,
         core_unreg,
         core_reg,
         about,

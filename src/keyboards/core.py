@@ -21,14 +21,6 @@ main_menu = ReplyKeyboardMarkup(keyboard=[
 ], resize_keyboard=True)
 
 
-main_menu_a = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text='Домой 🏠'), KeyboardButton(text='Панель 🛠️')],
-    [KeyboardButton(text='Проходка 🗝️')],
-    [KeyboardButton(text='ImageMaps 🌄')],
-    [KeyboardButton(text='О нас ⚒️'), KeyboardButton(text='Подержи 🍺')],
-], resize_keyboard=True)
-
-
 async def donation() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
     async def invoice(currency: int):

@@ -8,7 +8,7 @@ from logic import core as logic
 from logic import admin as logic_admin
 
 
-# Класс
+# Классы
 class ElyBy(Filter):
     """
     Фильтр, который проверяет, зарегистрирован ли пользователь в Ely.by.
@@ -22,12 +22,17 @@ class ElyBy(Filter):
         return self.registered == ((u.nick if u else u) is not None)
 
 
-# Класс
 class IsAdmin(Filter):
     """
     Фильтр, который провяет, является ли пользователь админом или супер-админом.
     """
+    def __init__(self, super: bool = False):
+        self.super = super
+
     async def __call__(self, event: Message | CallbackQuery) -> bool:
         user = event.from_user
         admins = await logic_admin.read_admins()
-        return user.id in admins
+        supers = await logic_admin.read_admins(super=True)
+        if self.super: result = user in supers
+        else: result = any(((user.id in admins), (user.id in supers)))
+        return result
