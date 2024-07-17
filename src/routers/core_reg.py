@@ -7,11 +7,11 @@ from logic import core as logic
 from messages import core as ms
 from keyboards import core as kb
 from keyboards import about as about_kb
-from utils.filters import ElyByCallback, ElyByMessage
+from utils.filters import ElyBy
 
 router = Router(name='core_reg')
-router.message.filter(ElyByMessage(True))
-router.callback_query.filter(ElyByCallback(True))
+router.message.filter(ElyBy(True))
+router.callback_query.filter(ElyBy(True))
 
 
 @router.message(F.text == 'Домой 🏠')

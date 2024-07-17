@@ -3,15 +3,15 @@ from aiogram.types import *
 from aiogram.filters import *
 from aiogram.fsm.context import FSMContext
 
-from utils.filters import ElyByMessage, ElyByCallback
+from utils.filters import ElyBy
 
 from logic import core as logic
 from messages import core as ms
 from keyboards import core as kb
 
 router = Router(name='core_unreg')
-router.message.filter(ElyByMessage(False))
-router.callback_query.filter(ElyByCallback(False))
+router.message.filter(ElyBy(False))
+router.callback_query.filter(ElyBy(False))
 
 
 @router.message(CommandStart())

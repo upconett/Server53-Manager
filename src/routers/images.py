@@ -5,14 +5,14 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import StateFilter
 
 from create_bot import bot
-from utils.filters import ElyByMessage
+from utils.filters import ElyBy
 from logic import images as logic
 from messages import images as ms
 from keyboards import images as kb
 
 
 router = Router(name='images')
-router.message.filter(ElyByMessage(True))
+router.message.filter(ElyBy(True))
 
 
 class St(StatesGroup):
