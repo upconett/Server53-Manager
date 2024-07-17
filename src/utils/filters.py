@@ -1,6 +1,9 @@
+# Python модули
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Filter
 
+
+# Локальные модули
 from logic import core as logic
 from logic import admin as logic_admin
 
