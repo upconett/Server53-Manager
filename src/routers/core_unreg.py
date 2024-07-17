@@ -1,19 +1,27 @@
+# Python модули
 from aiogram import Router
 from aiogram.types import *
 from aiogram.filters import *
 from aiogram.fsm.context import FSMContext
 
-from utils.filters import ElyByMessage, ElyByCallback
 
+# Локальные модули
+from utils.filters import ElyByMessage, ElyByCallback
 from logic import core as logic
 from messages import core as ms
 from keyboards import core as kb
 
+
+# Переменные
 router = Router(name='core_unreg')
+
+
+# Фильтры
 router.message.filter(ElyByMessage(False))
 router.callback_query.filter(ElyByCallback(False))
 
 
+# Функции
 @router.message(CommandStart())
 async def message_start(message: Message, state: FSMContext):
     user = message.from_user

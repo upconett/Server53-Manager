@@ -1,10 +1,17 @@
+# Python модули
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Filter
 
+
+# Локальные модули
 from logic import core as logic
 
 
+# Класс
 class ElyByMessage(Filter):
+    """
+    Фильтр, который проверяет, зарегистрирован ли пользователь на Ely.by.
+    """
     def __init__(self, registered: bool = True):
         self.registered = registered
 
@@ -15,6 +22,9 @@ class ElyByMessage(Filter):
 
 
 class ElyByCallback(Filter):
+    """
+    Фильтр, который проверяет, зарегистрирован ли пользователь на Ely.by.
+    """
     def __init__(self, registered: bool = True):
         self.registered = registered
 

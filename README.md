@@ -19,6 +19,7 @@ IMAGEMAPS_PATH="/home/minecraft/plugins/imagemaps"
 RCON_HOST="localhost"
 RCON_PORT=25575
 RCON_PASSWORD="you_pasSwoRd0123"
+ACCESS_CHECK_FREQUENCY="1"
 ```
 
 ## In order to work properly, bot needs web server <a href="https://github.com/upconett/auth.server53.ru">auth.server53.ru</a> to operate!

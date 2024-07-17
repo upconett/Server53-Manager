@@ -1,12 +1,17 @@
+# Python модули
 from aiogram import Bot, Dispatcher
 from aiogram.client.bot import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
 
-import config
+
+# Локальные модули
 from minecraft import MCRcon
 from utils import AccessChecker
 
+import config
 
+
+# Основные объекты для взаимодействия
 def_props = DefaultBotProperties(
     parse_mode='HTML'
 )
@@ -15,6 +20,7 @@ bot = Bot(
     token=config.BOT_TOKEN, 
     default=def_props
 )
+
 dp = Dispatcher(
     storage=MemoryStorage()
 )

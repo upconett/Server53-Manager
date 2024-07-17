@@ -1,8 +1,14 @@
+# Python модули
 from dotenv import load_dotenv
+
 import os
 
+
+# Локальные модули
 from const import env_variables
 
+
+# Чтение переменных окружения из.env файла
 load_dotenv()
 
 if any(key not in os.environ for key in env_variables):

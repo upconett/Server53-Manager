@@ -1,6 +1,14 @@
+# Локальные модули
 from const import md_chars
 
-def escape_mdv2(text):
+
+# Функции
+def escape_mdv2(text: str) -> str:
+    """
+    Форматирование текста для исключения конфликтов с MarkdownV2
+    :param text: Текст для форматирования
+    :return: Отформатированный текст
+    """
     escaped_text = []
 
     for char in text:
