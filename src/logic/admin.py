@@ -67,6 +67,7 @@ async def get_players(online: bool = False) -> list[UserDC]:
             players = await rcon.list()
             for p in players:
                 u = await s.execute(select(User).where(User.nick == p))
+                if len(u.all()) == 0: continue
                 result.append(UserDC(u.all()[0][0]))
         else:
             players = await s.execute(select(User))
