@@ -1,9 +1,12 @@
+# Python модули
 from aiogram import Router, F
 from aiogram.types import *
 from aiogram.filters import *
 from aiogram.fsm.context import FSMContext
 
-from create_bot import rcon
+
+# Локальные модули
+from minecraft import rcon
 from utils.filters import ElyBy, IsAdmin
 from utils.exceptions import NoUserWithNick, IsSuperAdmin
 from logic import core as logic_core
@@ -11,13 +14,16 @@ from logic import admin as logic
 from messages import admin as ms
 from keyboards import admin as kb 
 from keyboards import core as kb_core
+from minecraft import check_mcrcon
 
 
+# Переменные
 router = Router(name='admin')
 router.message.filter(ElyBy(registered=True), IsAdmin())
 router.callback_query.filter(ElyBy(registered=True), IsAdmin())
 
 
+# Функции
 @router.message(CommandStart())
 @router.message(F.text == 'Домой 🏠')
 async def message_start(message: Message, state: FSMContext):
@@ -27,8 +33,10 @@ async def message_start(message: Message, state: FSMContext):
 
     u = await logic_core.get_user_data(user)
 
-    if u.whitelisted_till: pr_text = u.whitelisted_till.strftime('%d.%m.%Y')
-    else: pr_text = None
+    if u.whitelisted_till:
+        pr_text = u.whitelisted_till.strftime('%d.%m.%Y')
+    else:
+        pr_text = None
 
     to_del = await message.answer(
             text=ms.start_logged(u.nick, pr_text),
@@ -50,7 +58,7 @@ async def message_admin_panel(message: Message):
     is_super = await logic.is_admin(user.id, is_super=True)
 
     await message.answer(
-        text=ms.admin_panel(super=is_super),
+        text=ms.admin_panel(is_super=is_super),
         reply_markup=kb.admin_panel(exc='admin_commands')
     )
     await message.delete()
@@ -64,7 +72,7 @@ async def message_admin_panel(query: CallbackQuery):
     is_super = await logic.is_admin(user.id, is_super=True)
 
     await query.message.edit_text(
-        text=ms.admin_panel(super=is_super),
+        text=ms.admin_panel(is_super=is_super),
         reply_markup=kb.admin_panel(exc='admin_commands')
     )
 
@@ -131,12 +139,13 @@ async def command_remove_access(message: Message):
         await message.delete()
     except NoUserWithNick:
         await message.answer(
-            test=ms.no_user_with_nick(nick),
+            text=ms.no_user_with_nick(nick),
             reply_markup=kb_core.back
         )
         await message.delete()
     
 
+@check_mcrcon
 @router.message(Command('ban'), F.text.count(' ') > 0)
 async def command_ban(message: Message):
     user = message.from_user
@@ -159,6 +168,7 @@ async def command_ban(message: Message):
 
 
 @router.message(Command('unban'), F.text.count(' ') > 0)
+@check_mcrcon
 async def command_unban(message: Message):
     user = message.from_user
     await logic_core.update_user(user)

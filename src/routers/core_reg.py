@@ -1,19 +1,25 @@
+# Python модули
 from aiogram import Router, F
 from aiogram.types import *
 from aiogram.filters import *
 from aiogram.fsm.context import FSMContext
 
+
+# Локальные модули
 from logic import core as logic
 from messages import core as ms
 from keyboards import core as kb
 from keyboards import about as about_kb
 from utils.filters import ElyBy
 
+
+# Переменные
 router = Router(name='core_reg')
 router.message.filter(ElyBy(True))
 router.callback_query.filter(ElyBy(True))
 
 
+# Функции
 @router.message(F.text == 'Домой 🏠')
 @router.message(Command('start', 'help'))
 async def message_start(message: Message, state: FSMContext):
@@ -23,8 +29,10 @@ async def message_start(message: Message, state: FSMContext):
 
     u = await logic.get_user_data(user)
 
-    if u.whitelisted_till: pr_text = u.whitelisted_till.strftime('%d.%m.%Y')
-    else: pr_text = None
+    if u.whitelisted_till:
+        pr_text = u.whitelisted_till.strftime('%d.%m.%Y')
+    else:
+        pr_text = None
 
     to_del = await message.answer(
             text=ms.start_logged(u.nick, pr_text),

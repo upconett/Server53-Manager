@@ -1,7 +1,10 @@
+# Python модули
 from aiogram import Router, F
 from aiogram.types import *
 from aiogram.fsm.context import FSMContext
 
+
+# Локальные модули
 from create_bot import bot
 from logic import core as logic_core
 from logic import access as logic
@@ -9,9 +12,11 @@ from messages import access as ms
 from keyboards import core as kb
 
 
+# Переменные
 router = Router(name='access')
 
 
+# Функции
 @router.pre_checkout_query(F.invoice_payload.endswith('access'))
 async def pre_checkout(pre_checkout_query: PreCheckoutQuery, state: FSMContext):
     user = pre_checkout_query.from_user

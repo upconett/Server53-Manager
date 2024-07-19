@@ -59,7 +59,6 @@ async def message_unreg(message: Message, state: FSMContext):
     user = message.from_user
     await logic.update_user(user)
 
-    data = await state.get_data()
     await state.clear()
 
     ms_login = await message.answer(
