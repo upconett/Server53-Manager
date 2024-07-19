@@ -3,7 +3,6 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.bot import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiomcrcon import Client
-import logging
 
 
 # Локальные модули
