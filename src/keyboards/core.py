@@ -18,7 +18,7 @@ main_menu = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='Домой 🏠')],
     [KeyboardButton(text='Проходка 🗝️')],
     [KeyboardButton(text='ImageMaps 🌄')],
-    [KeyboardButton(text='О нас ⚒️'), KeyboardButton(text='Подержи 🍺')],
+    [KeyboardButton(text='Инфо ℹ️'), KeyboardButton(text='Подержи 🍺')],
 ], resize_keyboard=True)
 
 
@@ -39,7 +39,7 @@ async def donation() -> InlineKeyboardMarkup:
             )
         )
 
-    kb.button(text='Поддержать | 25 ⭐', url=await invoice(1))
+    kb.button(text='Поддержать | 25 ⭐', url=await invoice(25))
     kb.button(text='Вернуться', callback_data='back')
     kb.adjust(1, repeat=True)
     return kb.as_markup()
@@ -61,7 +61,7 @@ async def access() -> InlineKeyboardMarkup:
             )
         )
 
-    kb.button(text='1 Месяц | 15 ⭐', url=await invoice(1))
+    kb.button(text='1 Месяц | 12 ⭐', url=await invoice(12))
     kb.button(text='Вернуться', callback_data='back')
     kb.adjust(1, repeat=True)
     return kb.as_markup()
