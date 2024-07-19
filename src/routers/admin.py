@@ -43,11 +43,11 @@ async def message_start(message: Message, state: FSMContext):
 
 
 @router.message(F.text == 'Панель 🛠️')
-async def message_admin_panel(message: Message, state: FSMContext):
+async def message_admin_panel(message: Message):
     user = message.from_user
     await logic_core.update_user(user)
     
-    is_super = await logic.is_admin(user.id, super=True)
+    is_super = await logic.is_admin(user.id, is_super=True)
 
     await message.answer(
         text=ms.admin_panel(super=is_super),
@@ -57,11 +57,11 @@ async def message_admin_panel(message: Message, state: FSMContext):
 
 
 @router.callback_query(F.data == 'admin_commands')
-async def message_admin_panel(query: CallbackQuery, state: FSMContext):
+async def message_admin_panel(query: CallbackQuery):
     user = query.from_user
     await logic_core.update_user(user)
     
-    is_super = await logic.is_admin(user.id, super=True)
+    is_super = await logic.is_admin(user.id, is_super=True)
 
     await query.message.edit_text(
         text=ms.admin_panel(super=is_super),
@@ -70,7 +70,7 @@ async def message_admin_panel(query: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(F.data == 'admin_online')
-async def query_players_online(query: CallbackQuery, state: FSMContext):
+async def query_players_online(query: CallbackQuery):
     user = query.from_user
     await logic_core.update_user(user)
 
@@ -83,7 +83,7 @@ async def query_players_online(query: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(F.data == 'admin_players')
-async def query_players_online(query: CallbackQuery, state: FSMContext):
+async def query_players_online(query: CallbackQuery):
     user = query.from_user
     await logic_core.update_user(user)
 
