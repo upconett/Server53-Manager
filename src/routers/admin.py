@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 
 
 # Локальные модули
-from minecraft import rcon
+from create_bot import rcon
 from utils.filters import ElyBy, IsAdmin
 from utils.exceptions import NoUserWithNick, IsSuperAdmin
 from logic import core as logic_core
@@ -120,9 +120,10 @@ async def command_remove_access(message: Message):
         await message.delete()
     
 
-@check_mcrcon
 @router.message(Command('ban'), F.text.count(' ') > 0)
 async def command_ban(message: Message):
+    await check_mcrcon(rcon)
+
     nick = message.text.split()[1]
     reason = ' '.join(message.text.split()[2:])
     if not await logic.is_user(nick):
@@ -140,8 +141,9 @@ async def command_ban(message: Message):
 
 
 @router.message(Command('unban'), F.text.count(' ') > 0)
-@check_mcrcon
 async def command_unban(message: Message):
+    await check_mcrcon(rcon)
+
     nick = message.text.split()[1]
     if not await logic.is_user(nick):
         await message.answer(
