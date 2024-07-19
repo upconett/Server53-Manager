@@ -289,3 +289,8 @@ async def command_block(message: Message):
             reply_markup=kb_core.back
         )
     await message.delete()
+
+
+@router.callback_query(F.data == 'admin_current')
+async def query_about_current(query: CallbackQuery):
+    await query.answer('Вы уже в этом разделе')

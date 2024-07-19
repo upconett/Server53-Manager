@@ -13,14 +13,34 @@ router = Router(name='about')
 async def query_about_mods(query: CallbackQuery):
     await query.message.edit_text(
         text=ms.main,
-        reply_markup=kb.main('about_main'),
-        link_preview_options=LinkPreviewOptions(is_disabled=True)
+        reply_markup=kb.main('about_main')
     )
+
 
 @router.callback_query(F.data == 'about_mods')
 async def query_about_mods(query: CallbackQuery):
     await query.message.edit_text(
         text=ms.mods,
-        reply_markup=kb.main('about_mods'),
-        link_preview_options=LinkPreviewOptions(is_disabled=True)
+        reply_markup=kb.main('about_mods')
     )
+
+
+@router.callback_query(F.data == 'about_elyby')
+async def query_about_mods(query: CallbackQuery):
+    await query.message.edit_text(
+        text=ms.elyby,
+        reply_markup=kb.main('about_elyby')
+    )
+
+
+@router.callback_query(F.data == 'about_launcher')
+async def query_about_mods(query: CallbackQuery):
+    await query.message.edit_text(
+        text=ms.launcher,
+        reply_markup=kb.main('about_launcher')
+    )
+
+
+@router.callback_query(F.data == 'about_current')
+async def query_about_current(query: CallbackQuery):
+    await query.answer('Вы уже читаете об этом')

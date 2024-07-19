@@ -13,7 +13,8 @@ import config
 
 # Основные объекты для взаимодействия
 def_props = DefaultBotProperties(
-    parse_mode='HTML'
+    parse_mode='HTML',
+    # link_preview_is_disabled=True
 )
 
 bot = Bot(

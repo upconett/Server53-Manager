@@ -21,8 +21,10 @@ elyby_url = 'https://account.ely.by/oauth2/v1?client_id=server53bot&redirect_uri
 # прописывай их сюда и будут 
 # появляться соответсвующие инлайн кнопки
 about_sections = {
-    'about_main': 'Главная',
-    'about_mods': 'Моды'
+    'about_main': 'О Нас',
+    'about_mods': 'Моды',
+    'about_elyby': 'Ely.by',
+    'about_launcher': 'Лаунчер'
 }
 
 admin_sections = {
