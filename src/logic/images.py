@@ -1,15 +1,19 @@
+# Python модули
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from aiogram.types import User as AIOgramUser
+
 import os
 
+# Локальные модули
 import config
 from create_bot import bot
 from database import engine
 from database.models import User, ImageMap
 
 
-def extract_name(callback_data: str) -> str: 
+# Функции
+def extract_name(callback_data: str) -> str:
     callback_data = callback_data.split('_')
     name = '_'.join(callback_data[1:])
     return name
@@ -17,7 +21,7 @@ def extract_name(callback_data: str) -> str:
 
 async def unique_name(name: str) -> bool:
     async with AsyncSession(engine) as s:
-        names = (await s.execute(select(ImageMap).where(ImageMap.name==name))).all()
+        names = (await s.execute(select(ImageMap).where(ImageMap.name == name))).all()
         return len(names) == 0
 
 

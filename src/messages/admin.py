@@ -1,7 +1,9 @@
+# Локальные модули
 from database.dataclasses import User as UserDC
 from logic import admin as logic
 
 
+# Конфигурируемые тексты
 def start_logged(nick: str, pr_text: str | None) -> str:
     if pr_text:
         pr = f'Проходка до {pr_text} 🗝️\nВы администратор 🛠️'

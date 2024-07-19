@@ -50,7 +50,7 @@ async def message_imagemaps(message: Message, state: FSMContext):
     await message.delete()
 
 
-@router.message(StateFilter(None), F.text == 'О нас ⚒️')
+@router.message(StateFilter(None), F.text == 'Инфо ℹ️')
 async def message_about_us(message: Message, state: FSMContext):
     user = message.from_user
     await logic.update_user(user)
