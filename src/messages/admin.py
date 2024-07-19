@@ -31,7 +31,7 @@ def admin_panel(is_super: bool = False) -> str:
         '• <code>/unban</code> - разбанить\n\n'
     )
     if is_super:
-        s_text = 'Супер Админ Панель 👑\n<blockquote>Пользоваться осторожно</blockquote>\n'
+        s_text = '<b>Супер Админ Панель</b> 👑\n<blockquote>Пользоваться осторожно</blockquote>\n'
         com_text += (
             '• <code>/admin</code> - сделать админом\n'
             '• <code>/super_admin</code> - сделать <b><i>супер</i></b> админом\n'
@@ -41,7 +41,7 @@ def admin_panel(is_super: bool = False) -> str:
         )
     else:
         s_text = (
-            'Админ Панель 🛠️\n'
+            '<b>Админ Панель</b> 🛠️\n'
             '<blockquote>Не зазнавайтесь</blockquote>\n'
         )
     return (
@@ -52,7 +52,7 @@ def admin_panel(is_super: bool = False) -> str:
     
 
 async def online(players: list[UserDC]) -> str:
-    message = 'Игроки онлайн 🕹️\n\n'
+    message = '<b>Игроки онлайн</b> 🕹️\n\n'
     p_text = []
     for p in players:
         if p.nick is None:
@@ -64,11 +64,13 @@ async def online(players: list[UserDC]) -> str:
     p_text = logic.sort_users_by_icon(p_text)
     for p in p_text:
         message += p
+    if not p_text:
+        message += 'Никто сейчас не играет 💤\n'
     return message
 
 
 async def all_players(players: list[UserDC]) -> str:
-    message = 'Все игроки 👥\n\n'
+    message = '<b>Все игроки</b> 👥\n\n'
     p_text = []
     for p in players:
         if p.nick is None:
@@ -81,6 +83,8 @@ async def all_players(players: list[UserDC]) -> str:
     p_text = logic.sort_users_by_icon(p_text)
     for p in p_text:
         message += p
+    if not p_text:
+        message += 'В базе данных ни одного игрока, почему то..? 👾\n'
     return message
 
 

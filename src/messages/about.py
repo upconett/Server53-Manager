@@ -19,7 +19,8 @@ mods = (
 
 elyby = (
     '<b>Ely.by</b> ♻️\n\n'
-    'Сервис <a href="https://ely.by">Ely.by</a> - система Скинов и Авторизации для Minecraft серверов'
+    'Сервис <a href="https://ely.by">Ely.by</a> - система Скинов и Авторизации для Minecraft серверов\n\n'
+    '<blockquote>Без неё мы как без рук...</blockquote>'
 )
 
 launcher = (
