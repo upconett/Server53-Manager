@@ -10,7 +10,6 @@ from database import engine
 from database.models import User
 from utils.exceptions import AlreadyRegistered
 from database.dataclasses import User as UserDC
-from messages import core as ms
 from minecraft import MCRcon
 
 
