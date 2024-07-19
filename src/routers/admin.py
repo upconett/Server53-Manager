@@ -150,7 +150,7 @@ async def command_ban(message: Message):
             reply_markup=kb_core.back
         )
     else:
-        await rcon.command(f'ban {nick} {reason}')
+        await rcon.send_cmd(f'ban {nick} {reason}')
         await message.answer(
             text=ms.banned(nick, reason),
             reply_markup=kb_core.back
@@ -170,7 +170,7 @@ async def command_unban(message: Message):
             reply_markup=kb_core.back
         )
     else:
-        await rcon.command(f'pardon {nick}')
+        await rcon.send_cmd(f'pardon {nick}')
         await message.answer(
             text=ms.unbanned(nick),
             reply_markup=kb_core.back
@@ -186,7 +186,7 @@ async def command_admin(message: Message):
 
     try:
         await logic.add_admin(nick)
-        await rcon.command(f'op {nick}')
+        await rcon.send_cmd(f'op {nick}')
         await message.answer(
             text=ms.adminned(nick),
             reply_markup=kb_core.back
@@ -206,8 +206,8 @@ async def command_super_admin(message: Message):
     nick = message.text.split()[1]
 
     try:
-        await logic.add_admin(nick, super=True)
-        await rcon.command(f'op {nick}')
+        await logic.add_admin(nick, is_super=True)
+        await rcon.send_cmd(f'op {nick}')
         await message.answer(
             text=ms.super_adminned(nick),
             reply_markup=kb_core.back
@@ -228,7 +228,7 @@ async def command_remove_admin(message: Message):
 
     try:
         await logic.remove_admin(nick)
-        await rcon.command(f'op {nick}')
+        await rcon.send_cmd(f'op {nick}')
         await message.answer(
             text=ms.unadminned(nick),
             reply_markup=kb_core.back

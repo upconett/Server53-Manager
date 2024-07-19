@@ -1,12 +1,15 @@
+# Python модули
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
+# Простые клавиатуры
 cancel = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Отмена', callback_data='cancel')]
 ])
 
 
+# Конфигурируемые клавиатуры
 def image_no_name() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
     kb.button(text='Добавить', callback_data=fr'image_noname')

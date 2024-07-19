@@ -16,7 +16,7 @@ async def onstartup():
 
 
 async def onshutdown():
-    await rcon.client.close()
+    await rcon.close()
     ac.stop()
     print('Shutting down... | 💤')
 
@@ -27,7 +27,7 @@ async def main():
     dp.shutdown.register(onshutdown)
 
     try:
-        await rcon.client.connect()
+        await rcon.connect()
     except:
         print("Minecraft RCON connection failed, check .env")
 

@@ -1,6 +1,10 @@
+# Python модули
 from dataclasses import dataclass
-from database.models import User as UserDB
 from datetime import datetime
+
+
+# Локальные модули
+from database.models import User as UserDB
 
 
 @dataclass

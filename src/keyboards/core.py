@@ -1,17 +1,18 @@
-from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
+# Python модули
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.types import LabeledPrice
 from aiogram.methods.create_invoice_link import CreateInvoiceLink
 
+# Локальные модули
 from create_bot import bot
 from const import elyby_url
 
-
+# Простые клавиатуры
 elyby_login = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Авторизоваться в Ely.by', url=elyby_url, callback_data='login')]
 ])
-
 
 main_menu = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='Домой 🏠')],
@@ -21,8 +22,10 @@ main_menu = ReplyKeyboardMarkup(keyboard=[
 ], resize_keyboard=True)
 
 
+# Конфигурируемые клавиатуры
 async def donation() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
+
     async def invoice(currency: int):
         prices = [LabeledPrice(label="XTR", amount=currency)]
         return await bot(
@@ -35,6 +38,7 @@ async def donation() -> InlineKeyboardMarkup:
                 currency="XTR",
             )
         )
+
     kb.button(text='Поддержать | 25 ⭐', url=await invoice(1))
     kb.button(text='Вернуться', callback_data='back')
     kb.adjust(1, repeat=True)
@@ -43,6 +47,7 @@ async def donation() -> InlineKeyboardMarkup:
 
 async def access() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
+
     async def invoice(currency: int):
         prices = [LabeledPrice(label="XTR", amount=currency)]
         return await bot(
@@ -55,12 +60,12 @@ async def access() -> InlineKeyboardMarkup:
                 currency="XTR",
             )
         )
+
     kb.button(text='1 Месяц | 15 ⭐', url=await invoice(1))
     kb.button(text='Вернуться', callback_data='back')
     kb.adjust(1, repeat=True)
     return kb.as_markup()
 
-    
 
 back = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Вернуться', callback_data='back')]
