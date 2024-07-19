@@ -1,13 +1,17 @@
+# Python модули
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy import inspect
-import asyncio
 
+
+# Локальные модули
 import config
 from database.models import Base
 
+
+# Переменные
 engine = create_async_engine('sqlite+aiosqlite:///{0}'.format(config.DBFILE))
 
 
+# Функции
 async def check_tables():
     async with AsyncSession(engine) as s:
         async with s.bind.connect() as conn:

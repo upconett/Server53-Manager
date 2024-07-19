@@ -32,7 +32,7 @@ class IsAdmin(Filter):
     async def __call__(self, event: Message | CallbackQuery) -> bool:
         user = event.from_user
         admins = await logic_admin.read_admins()
-        supers = await logic_admin.read_admins(super=True)
+        supers = await logic_admin.read_admins(is_super=True)
         if self.super: result = user in supers
         else: result = any(((user.id in admins), (user.id in supers)))
         return result

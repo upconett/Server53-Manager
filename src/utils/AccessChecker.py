@@ -3,12 +3,12 @@ from aiogram import Bot
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from datetime import datetime
+from aiomcrcon import Client
 
 import asyncio
 
 
 # Локальные модули
-from minecraft import MCRcon
 from database import engine
 from database.models import User
 from messages import core as ms
@@ -20,13 +20,13 @@ class AccessChecker:
     Проверка наличия проходки.
     """
     bot: Bot
-    rcon: MCRcon
+    rcon: Client
     frequency: int
     started: bool
 
     __task: asyncio.Task
 
-    def __init__(self, bot: Bot, rcon: MCRcon, frequency: int):
+    def __init__(self, bot: Bot, rcon: Client, frequency: int):
         self.bot = bot
         self.rcon = rcon
         self.frequency = frequency
@@ -55,7 +55,7 @@ class AccessChecker:
                     u: User = u[0]
                     if u.whitelisted_till < datetime.now():
                         u.whitelisted_till = None
-                        await self.rcon.whitelist.remove(u.nick)
+                        await self.rcon.send_cmd(f'whitelist remove {u.nick}')
                         await self.__send_warning(u.id)
                 await s.commit()
             await asyncio.sleep(self.frequency * 3600)

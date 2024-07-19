@@ -1,9 +1,13 @@
+# Python модули
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+
+# Локальные модули
 from const import about_sections
 
 
+# Функции
 def main(exc: str) -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
     for s in about_sections:

@@ -2,10 +2,10 @@
 from aiogram import Bot, Dispatcher
 from aiogram.client.bot import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiomcrcon import Client
 
 
 # Локальные модули
-from minecraft import MCRcon
 from utils import AccessChecker
 
 import config
@@ -14,7 +14,7 @@ import config
 # Основные объекты для взаимодействия
 def_props = DefaultBotProperties(
     parse_mode='HTML',
-    # link_preview_is_disabled=True
+    link_preview_is_disabled=True
 )
 
 bot = Bot(
@@ -26,7 +26,7 @@ dp = Dispatcher(
     storage=MemoryStorage()
 )
 
-rcon = MCRcon(
+rcon = Client(
     host=config.RCON_HOST,
     port=config.RCON_PORT,
     password=config.RCON_PASSWORD
