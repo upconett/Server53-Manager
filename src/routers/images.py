@@ -33,7 +33,6 @@ async def on_image_with_name(message: Message, state: FSMContext) -> None:
     :param message: Сообщение Telegram
     :param state: Состояние FSM машины
     """
-    print('on_image_with_name')
     if message.photo or 'image' in message.document.mime_type:
         if message.photo:
             file_id = message.photo[-1].file_id
@@ -60,7 +59,6 @@ async def on_image(message: Message, state: FSMContext) -> None:
     :param message: Сообщение Telegram
     :param state: Состояние FSM машины
     """
-    print('on_image')
     if message.photo or 'image' in message.document.mime_type:
         if message.photo:
             file_id = message.photo[-1].file_id
@@ -86,7 +84,6 @@ async def start_naming(query: CallbackQuery, state: FSMContext) -> None:
     :param query: Данные inline кнопки
     :param state: Состояние FSM машины
     """
-    print('start_naming')
     to_edit = await query.message.edit_text(
         text=ms.image_naming,
         reply_markup=kb.cancel
@@ -100,14 +97,12 @@ async def start_naming(query: CallbackQuery, state: FSMContext) -> None:
 
 
 @router.message(StateFilter(St.naming_image), F.text)
-async def on_name(message: Message, state: FSMContext):
+async def on_name(message: Message, user: User, state: FSMContext):
     """
     Ловит имя изображения.
     :param message: Сообщение Telegram
     :param state: Состояние FSM машины
     """
-    print('on_name')
-    user = message.from_user
     name = message.text.strip()
 
     if name.count(' ') > 0:
@@ -135,14 +130,12 @@ async def on_name(message: Message, state: FSMContext):
 
 
 @router.callback_query(StateFilter(St.rememb_image), F.data.startswith('image_'))
-async def accept_image(query: CallbackQuery, state: FSMContext):
+async def accept_image(query: CallbackQuery, user: User, state: FSMContext):
     """
     Принимает подтверждение на загрузку изображения с именем.
     :param query: Данные inline кнопки
     :param state: Состояние FSM машины
     """
-    print('accept_image')
-    user = query.from_user
     name = logic.extract_name(query.data)
     data = await state.get_data()
 
@@ -171,7 +164,6 @@ async def on_cancel(query: CallbackQuery, state: FSMContext):
     :param query: Данные inline кнопки
     :param state: Состояние FSM машины
     """
-    print('on_cancel')
     data = await state.get_data()
     await query.message.delete()
     await bot.delete_message(

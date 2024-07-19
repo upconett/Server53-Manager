@@ -13,8 +13,7 @@ router = Router(name='access')
 
 
 @router.pre_checkout_query(F.invoice_payload.endswith('access'))
-async def pre_checkout(pre_checkout_query: PreCheckoutQuery, state: FSMContext):
-    user = pre_checkout_query.from_user
+async def pre_checkout(pre_checkout_query: PreCheckoutQuery, user: User, state: FSMContext):
     data = await state.get_data()
     
     try:
@@ -32,10 +31,7 @@ async def pre_checkout(pre_checkout_query: PreCheckoutQuery, state: FSMContext):
 
 
 @router.message(F.successful_payment)
-async def successful_donation(message: Message, state: FSMContext):
-    user = message.from_user
-    await logic_core.update_user(user)
-
+async def successful_donation(message: Message, user: User, state: FSMContext):
     data = await state.get_data()
 
     till = data.get('access_till')

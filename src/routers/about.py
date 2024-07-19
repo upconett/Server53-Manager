@@ -5,6 +5,8 @@ from aiogram.filters import *
 from messages import about as ms
 from keyboards import about as kb
 
+from utils.logging import log
+
 
 router = Router(name='about')
 

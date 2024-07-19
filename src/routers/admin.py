@@ -20,13 +20,9 @@ router.callback_query.filter(ElyBy(registered=True), IsAdmin())
 
 @router.message(CommandStart())
 @router.message(F.text == 'Домой 🏠')
-async def message_start(message: Message, state: FSMContext):
-    user = message.from_user
-    await logic_core.update_user(user)
+async def message_start(message: Message, user: User, state: FSMContext):
     data = await state.get_data()
-
     u = await logic_core.get_user_data(user)
-
     if u.whitelisted_till: pr_text = u.whitelisted_till.strftime('%d.%m.%Y')
     else: pr_text = None
 
@@ -43,12 +39,8 @@ async def message_start(message: Message, state: FSMContext):
 
 
 @router.message(F.text == 'Панель 🛠️')
-async def message_admin_panel(message: Message):
-    user = message.from_user
-    await logic_core.update_user(user)
-    
+async def message_admin_panel(message: Message, user: User):
     is_super = await logic.is_admin(user.id, is_super=True)
-
     await message.answer(
         text=ms.admin_panel(super=is_super),
         reply_markup=kb.admin_panel(exc='admin_commands')
@@ -57,12 +49,8 @@ async def message_admin_panel(message: Message):
 
 
 @router.callback_query(F.data == 'admin_commands')
-async def message_admin_panel(query: CallbackQuery):
-    user = query.from_user
-    await logic_core.update_user(user)
-    
+async def message_admin_panel(query: CallbackQuery, user: User):
     is_super = await logic.is_admin(user.id, is_super=True)
-
     await query.message.edit_text(
         text=ms.admin_panel(super=is_super),
         reply_markup=kb.admin_panel(exc='admin_commands')
@@ -71,11 +59,7 @@ async def message_admin_panel(query: CallbackQuery):
 
 @router.callback_query(F.data == 'admin_online')
 async def query_players_online(query: CallbackQuery):
-    user = query.from_user
-    await logic_core.update_user(user)
-
     online = await logic.get_players(online=True)
-
     await query.message.edit_text(
         text=await ms.online(online),
         reply_markup=kb.admin_panel(exc='admin_online')
@@ -84,11 +68,7 @@ async def query_players_online(query: CallbackQuery):
 
 @router.callback_query(F.data == 'admin_players')
 async def query_players_online(query: CallbackQuery):
-    user = query.from_user
-    await logic_core.update_user(user)
-
     players = await logic.get_players()
-
     await query.message.edit_text(
         text=await ms.all_players(players),
         reply_markup=kb.admin_panel(exc='admin_players')
@@ -97,10 +77,7 @@ async def query_players_online(query: CallbackQuery):
 
 @router.message(Command('access'), F.text.count(' ') > 0)
 async def command_give_access(message: Message):
-    user = message.from_user
-    await logic_core.update_user(user)
     nick = message.text.split()[1]
-
     try:
         res_code = await logic.give_access(nick)
         await message.answer(
@@ -118,10 +95,7 @@ async def command_give_access(message: Message):
 
 @router.message(Command('remove_access'), F.text.count(' ') > 0)
 async def command_remove_access(message: Message):
-    user = message.from_user
-    await logic_core.update_user(user)
     nick = message.text.split()[1]
-
     try:
         await logic.remove_access(nick)
         await message.answer(
@@ -139,11 +113,8 @@ async def command_remove_access(message: Message):
 
 @router.message(Command('ban'), F.text.count(' ') > 0)
 async def command_ban(message: Message):
-    user = message.from_user
-    await logic_core.update_user(user)
     nick = message.text.split()[1]
     reason = ' '.join(message.text.split()[2:])
-
     if not await logic.is_user(nick):
         await message.answer(
             text=ms.no_user_with_nick(nick),
@@ -160,10 +131,7 @@ async def command_ban(message: Message):
 
 @router.message(Command('unban'), F.text.count(' ') > 0)
 async def command_unban(message: Message):
-    user = message.from_user
-    await logic_core.update_user(user)
     nick = message.text.split()[1]
-
     if not await logic.is_user(nick):
         await message.answer(
             text=ms.no_user_with_nick(nick),
@@ -180,10 +148,7 @@ async def command_unban(message: Message):
 
 @router.message(Command('admin'), F.text.count(' ') > 0)
 async def command_admin(message: Message):
-    user = message.from_user
-    await logic_core.update_user(user)
     nick = message.text.split()[1]
-
     try:
         await logic.add_admin(nick)
         await rcon.send_cmd(f'op {nick}')
@@ -201,10 +166,7 @@ async def command_admin(message: Message):
 
 @router.message(Command('super_admin'), F.text.count(' ') > 0)
 async def command_super_admin(message: Message):
-    user = message.from_user
-    await logic_core.update_user(user)
     nick = message.text.split()[1]
-
     try:
         await logic.add_admin(nick, is_super=True)
         await rcon.send_cmd(f'op {nick}')
@@ -222,10 +184,7 @@ async def command_super_admin(message: Message):
 
 @router.message(Command('remove_admin'), F.text.count(' ') > 0)
 async def command_remove_admin(message: Message):
-    user = message.from_user
-    await logic_core.update_user(user)
     nick = message.text.split()[1]
-
     try:
         await logic.remove_admin(nick)
         await rcon.send_cmd(f'op {nick}')
@@ -248,10 +207,7 @@ async def command_remove_admin(message: Message):
 
 @router.message(Command('block'), F.text.count(' ') > 0)
 async def command_block(message: Message):
-    user = message.from_user
-    await logic_core.update_user(user)
     nick = message.text.split()[1]
-
     try:
         await logic.block_user(nick)
         await message.answer(
@@ -273,10 +229,7 @@ async def command_block(message: Message):
 
 @router.message(Command('unblock'), F.text.count(' ') > 0)
 async def command_block(message: Message):
-    user = message.from_user
-    await logic_core.update_user(user)
     nick = message.text.split()[1]
-
     try:
         await logic.unblock_user(nick)
         await message.answer(

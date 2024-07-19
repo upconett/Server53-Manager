@@ -2,6 +2,7 @@
 from dotenv import load_dotenv
 
 import os
+import logging
 
 
 # Локальные модули
@@ -12,7 +13,7 @@ from const import env_variables
 load_dotenv()
 
 if any(key not in os.environ for key in env_variables):
-    print(f'Create .env file with following data:\n{env_variables}')
+    logging.fatal(f'Create .env file with following data:\n{env_variables}')
     quit()
 
 BOT_TOKEN = os.environ['BOT_TOKEN']
@@ -23,3 +24,13 @@ RCON_HOST = os.environ['RCON_HOST']
 RCON_PORT = os.environ['RCON_PORT']
 RCON_PASSWORD = os.environ['RCON_PASSWORD']
 ACCESS_CHECK_FREQUENCY = os.environ['ACCESS_CHECK_FREQUENCY']
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    datefmt="%d.%m.%y [%H:%M:%S]"
+)
+for logger in logging.root.manager.loggerDict:
+    if 'aiogram' in logger:
+        logging.getLogger(logger).disabled = True

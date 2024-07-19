@@ -17,7 +17,7 @@ router = Router(name='donation')
 
 # Функции
 @router.pre_checkout_query(F.invoice_payload.endswith('donation'))
-async def pre_checkout(pre_checkout_query: PreCheckoutQuery, state: FSMContext):
+async def pre_checkout(pre_checkout_query: PreCheckoutQuery):
     """
     Поимка платежа на донат.
     :param pre_checkout_query:
@@ -27,15 +27,12 @@ async def pre_checkout(pre_checkout_query: PreCheckoutQuery, state: FSMContext):
 
 
 @router.message(F.successful_payment)
-async def successful_donation(message: Message, state: FSMContext):
+async def successful_donation(message: Message, user: User, state: FSMContext):
     """
     Уведомление об успешном платеже.
     :param message: Сообщение Telegram
     :param state: Состояние FSM машины
     """
-    user = message.from_user
-    await logic.update_user(user)
-
     data = await state.get_data()
 
     if 'donation_to_edit' in data:

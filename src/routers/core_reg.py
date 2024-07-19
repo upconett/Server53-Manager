@@ -16,9 +16,7 @@ router.callback_query.filter(ElyBy(True))
 
 @router.message(F.text == 'Домой 🏠')
 @router.message(Command('start', 'help'))
-async def message_start(message: Message, state: FSMContext):
-    user = message.from_user
-    await logic.update_user(user)
+async def message_start(message: Message, user: User, state: FSMContext):
     data = await state.get_data()
 
     u = await logic.get_user_data(user)
@@ -39,10 +37,7 @@ async def message_start(message: Message, state: FSMContext):
 
 
 @router.message(StateFilter(None), F.text == 'ImageMaps 🌄')
-async def message_imagemaps(message: Message, state: FSMContext):
-    user = message.from_user
-    await logic.update_user(user)
-    
+async def message_imagemaps(message: Message):
     await message.answer(
         text=ms.about_imagemaps,
         reply_markup=kb.back
@@ -51,10 +46,7 @@ async def message_imagemaps(message: Message, state: FSMContext):
 
 
 @router.message(StateFilter(None), F.text == 'Инфо ℹ️')
-async def message_about_us(message: Message, state: FSMContext):
-    user = message.from_user
-    await logic.update_user(user)
-
+async def message_about_us(message: Message):
     await message.answer(
         text=ms.about_us,
         reply_markup=about_kb.main('about_main')
@@ -64,9 +56,6 @@ async def message_about_us(message: Message, state: FSMContext):
 
 @router.message(StateFilter(None), F.text == 'Подержи 🍺')
 async def message_hold_beer(message: Message, state: FSMContext):
-    user = message.from_user
-    await logic.update_user(user)
-
     data = await state.get_data()
 
     to_edit = await message.answer(
@@ -80,10 +69,7 @@ async def message_hold_beer(message: Message, state: FSMContext):
 
 
 @router.message(StateFilter(None), F.text == 'Проходка 🗝️')
-async def message_access(message: Message, state: FSMContext):
-    user = message.from_user
-    await logic.update_user(user)
-
+async def message_access(message: Message, user: User, state: FSMContext):
     data = await state.get_data()
     u = await logic.get_user_data(user)
 
@@ -98,6 +84,4 @@ async def message_access(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == 'back')
 async def query_back(query: CallbackQuery):
-    user = query.from_user
-    await logic.update_user(user)
     await query.message.delete()

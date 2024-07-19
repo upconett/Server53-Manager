@@ -6,6 +6,7 @@ from datetime import datetime
 from aiomcrcon import Client
 
 import asyncio
+import logging
 
 
 # Локальные модули
@@ -42,7 +43,7 @@ class AccessChecker:
                 text=ms.access_warning
             )
         except Exception as e:
-            print("Can't send warning:", e)
+            logging.info("Can't send warning:", e)
 
     async def __check_access(self) -> None:
         """
@@ -64,7 +65,7 @@ class AccessChecker:
         """
         Старт проверки срока действия всех проходок.
         """
-        print('Starting AccessChecker...')
+        logging.info('Starting AccessChecker...')
         self.started = True
         self.__task = asyncio.create_task(self.__check_access())
 
@@ -72,6 +73,6 @@ class AccessChecker:
         """
         Выключение проверки срока действия всех проходок.
         """
-        print('Stopping AccessChecker...')
+        logging.info('Stopping AccessChecker...')
         self.started = False
         self.__task.cancel()

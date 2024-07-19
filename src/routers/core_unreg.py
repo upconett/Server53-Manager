@@ -20,10 +20,7 @@ router.callback_query.filter(ElyBy(False))
 
 # Функции
 @router.message(CommandStart())
-async def message_start(message: Message, state: FSMContext):
-    user = message.from_user
-    await logic.update_user(user)
-
+async def message_start(message: Message, user: User, state: FSMContext):
     data = await state.get_data()
     await logic.delete_extra(user, data)
     await state.clear()
@@ -55,13 +52,8 @@ async def message_start(message: Message, state: FSMContext):
 
     
 @router.message()
-async def message_unreg(message: Message, state: FSMContext):
-    user = message.from_user
-    await logic.update_user(user)
-
-    data = await state.get_data()
+async def message_unreg(message: Message, user: User, state: FSMContext):
     await state.clear()
-
     ms_login = await message.answer(
         text=ms.start_unreg(user),
         reply_markup=kb.elyby_login
