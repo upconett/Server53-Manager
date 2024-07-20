@@ -80,6 +80,6 @@ async def leave_user(user: AIOgramUser) -> None:
 async def add_to_whitelist(user: AIOgramUser) -> bool:
     async with AsyncSession(engine) as s:
         u = await s.get(User, {'id': user.id})
-        old_whitelist = await MCRcon.whitelist_get()
+        old_whitelist = await MCRcon.whitelist_get(rcon)
         await rcon.send_cmd(f'whitelist add {u.nick}')
         return u.nick in old_whitelist
