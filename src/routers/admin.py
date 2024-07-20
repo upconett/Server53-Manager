@@ -69,18 +69,24 @@ async def message_admin_panel(query: CallbackQuery, user: User):
 @router.callback_query(F.data == 'admin_online')
 async def query_players_online(query: CallbackQuery):
     online = await logic.get_players(online=True)
+    message, entities = await logic.generate_ms_ent_online(online)
     await query.message.edit_text(
-        text=await ms.online(online),
-        reply_markup=kb.admin_panel(exc='admin_online')
+        text=message,
+        reply_markup=kb.admin_panel(exc='admin_online'),
+        entities=entities,
+        parse_mode=None
     )
 
 
 @router.callback_query(F.data == 'admin_players')
 async def query_players_online(query: CallbackQuery):
     players = await logic.get_players()
+    message, entities = await logic.generate_ms_ent_all_players(players)
     await query.message.edit_text(
-        text=await ms.all_players(players),
-        reply_markup=kb.admin_panel(exc='admin_players')
+        text=message,
+        reply_markup=kb.admin_panel(exc='admin_players'),
+        entities=entities,
+        parse_mode=None
     )
 
 

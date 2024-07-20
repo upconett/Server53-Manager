@@ -1,6 +1,8 @@
 # Python модули
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from aiogram.types import MessageEntity
+from aiogram.types import User as AIOgramUser
 
 import aiofiles
 
@@ -152,3 +154,58 @@ async def unblock_user(nick: str) -> None:
         u: User = res[0][0]
         u.allowed = True
         await s.commit()
+
+
+async def generate_ms_ent_online(online_list: list[UserDC]) -> tuple[str, list[MessageEntity]]:
+    message = 'Игроки онлайн 🕹️\n\n'
+    entities = []
+    offset = len(message)+2
+    for p in online_list:
+        if p.nick is None:
+            continue
+        is_a = await is_admin(p.id)
+        is_s = await is_admin(p.id, is_super=True)
+        icon = '👑' if is_s else '🛠️' if is_a else '👤'
+        name = p.username if p.username else p.first_name
+        record = f'{icon} {p.nick} - {name}\n'
+        message += record
+        entities.append(MessageEntity(
+            type='text_mention',
+            offset=(offset+len(icon)+len(p.nick)+4),
+            length=len(name),
+            user=AIOgramUser(
+                id=p.id,
+                is_bot=False,
+                first_name=p.first_name
+            )
+        ))
+        offset += len(record)
+    return message, entities
+
+
+async def generate_ms_ent_all_players(players_list: list[UserDC]) -> tuple[str, list[MessageEntity]]:
+    message = 'Все игроки 👥\n\n'
+    entities = []
+    offset = len(message)+2
+    for p in players_list:
+        if p.nick is None:
+            continue
+        is_a = await is_admin(p.id)
+        is_s = await is_admin(p.id, is_super=True)
+        icon = '👑' if is_s else '🛠️' if is_a else '👤'
+        access = '🔒' if p.access is None else f'🗝️ ({p.access.whitelisted_till.strftime("%d.%m.%Y")})'
+        name = p.username if p.username else p.first_name
+        record = f'{icon} {p.nick} - {name} {access}\n'
+        message += record
+        entities.append(MessageEntity(
+            type='text_mention',
+            offset=(offset+len(icon)+len(p.nick)+4),
+            length=len(name),
+            user=AIOgramUser(
+                id=p.id,
+                is_bot=False,
+                first_name=p.first_name
+            )
+        ))
+        offset += len(record)
+    return message, entities

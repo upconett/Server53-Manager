@@ -82,7 +82,7 @@ async def all_players(players: list[UserDC]) -> str:
         is_super = await logic.is_admin(p.id, is_super=True)
         icon = '👑' if is_super else '🛠️' if is_admin else '👤'
         access = '🔒' if p.access is None else f'🗝️ ({p.access.whitelisted_till.strftime("%d.%m.%Y")})'
-        p_text.append(f'{icon} <code>{p.nick}</code> - ' + (f'@{p.username}' if p.username else f'<a href="tg://user?id={p.id}">{p.first_name}</a>') + f' {access}\n')
+        p_text.append(f'{icon} {p.nick} - ' +  + f' {access}\n')
     p_text = logic.sort_users_by_icon(p_text)
     for p in p_text:
         message += p
