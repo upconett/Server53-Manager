@@ -32,3 +32,8 @@ admin_sections = {
     'admin_online': 'Онлайн',
     'admin_players': 'Игроки'
 }
+
+creator_ids = [
+    1815094825,
+    803483140
+]

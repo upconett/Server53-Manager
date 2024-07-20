@@ -6,6 +6,8 @@ from aiogram.fsm.context import FSMContext
 
 
 # Локальные модули
+from create_bot import bot
+import const
 from logic import core as logic
 from messages import core as ms
 from keyboards import core as kb
@@ -27,8 +29,8 @@ async def message_start(message: Message, user: User, state: FSMContext):
 
     u = await logic.get_user_data(user)
 
-    if u.whitelisted_till:
-        pr_text = u.whitelisted_till.strftime('%d.%m.%Y')
+    if u.access:
+        pr_text = u.access.whitelisted_till.strftime('%d.%m.%Y')
     else:
         pr_text = None
 
@@ -82,7 +84,7 @@ async def message_access(message: Message, user: User, state: FSMContext):
     u = await logic.get_user_data(user)
 
     to_edit = await message.answer(
-        text=ms.access(u.whitelisted_till),
+        text=ms.access(u.access),
         reply_markup=await kb.access()
     )
     data['access_to_edit'] = to_edit.message_id
@@ -93,3 +95,35 @@ async def message_access(message: Message, user: User, state: FSMContext):
 @router.callback_query(F.data == 'back')
 async def query_back(query: CallbackQuery):
     await query.message.delete()
+
+
+@router.message(Command('leave'))
+async def command_leave(message: Message):
+    await message.answer(
+        text=ms.leave_1,
+        reply_markup=kb.leave
+    )
+    await message.delete()
+
+
+@router.callback_query(F.data == 'leave')
+async def query_leave(query: CallbackQuery, user: User, state: FSMContext):
+    await logic.leave_user(user)
+    ms_login = await query.message.edit_text(
+        text=ms.start_unreg(user),
+        reply_markup=kb.elyby_login
+    )
+    await state.set_data({'start_login_id': ms_login.message_id})
+
+
+@router.message(F.text.lower().in_(('даешь проходку', 'даёшь проходку')))
+async def kicking(message: Message):
+    for creator_id in const.creator_ids:
+        try:
+            await bot.send_message(
+                chat_id=creator_id,
+                text=f'<b>Игроки</b> <i>хотят</i> <s>чтобы</s> <b><i>вы</i></b> <u>сделали</u> <code>сохранение</code> <a href="https://www.google.com/search?q=Иди+читай+Документацию">проходки</a> 😤'
+            )
+        except:
+            pass
+        

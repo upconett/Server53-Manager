@@ -7,6 +7,7 @@ from aiogram.fsm.context import FSMContext
 
 # Локальные модули
 from create_bot import rcon
+from minecraft.MCRcon import check_mcrcon
 from utils.filters import ElyBy, IsAdmin
 from utils.exceptions import NoUserWithNick, IsSuperAdmin
 from logic import core as logic_core
@@ -29,8 +30,8 @@ async def message_start(message: Message, user: User, state: FSMContext):
     data = await state.get_data()
     u = await logic_core.get_user_data(user)
 
-    if u.whitelisted_till:
-        pr_text = u.whitelisted_till.strftime('%d.%m.%Y')
+    if u.access:
+        pr_text = u.access.whitelisted_till.strftime('%d.%m.%Y')
     else:
         pr_text = None
 

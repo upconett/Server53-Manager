@@ -5,6 +5,19 @@ from datetime import datetime
 
 # Локальные модули
 from database.models import User as UserDB
+from database.models import Access as AccessDB
+
+
+@dataclass
+class Access:
+    id: int
+    nick: str
+    whitelisted_till: datetime
+
+    def __init__(self, access: AccessDB | None):
+        self.id = access.id
+        self.nick = access.nick
+        self.whitelisted_till = access.whitelisted_till
 
 
 @dataclass
@@ -17,7 +30,7 @@ class User:
     uuid: str | None
     nick: str | None
 
-    whitelisted_till: datetime | None
+    access: Access
 
     def __init__(self, user: UserDB):
         self.id = user.id
@@ -28,4 +41,4 @@ class User:
         self.uuid = user.uuid
         self.nick = user.nick
 
-        self.whitelisted_till = user.whitelisted_till
+        self.access = Access(user.access) if user.access else None

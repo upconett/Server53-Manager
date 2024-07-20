@@ -10,7 +10,7 @@ from const import env_variables
 
 
 # Чтение переменных окружения из.env файла
-load_dotenv()
+load_dotenv(override=True)
 
 if any(key not in os.environ for key in env_variables):
     logging.fatal(f'Create .env file with following data:\n{env_variables}')
@@ -31,6 +31,7 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s",
     datefmt="%d.%m.%y [%H:%M:%S]"
 )
+
 for logger in logging.root.manager.loggerDict:
     if 'aiogram' in logger:
-        logging.getLogger(logger).disabled = True
+        logging.getLogger(logger).setLevel(logging.INFO)

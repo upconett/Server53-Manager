@@ -19,7 +19,10 @@ def start_logged(nick: str, pr_text: str | None) -> str:
         f'<b>С возвращением, {nick} 😄</b>\n\n'
         'Адрес сервера всё тот же:\n'
         '<code>mc.server53.ru</code>\n\n'
-        f'{pr}'
+        f'{pr}\n\n'
+		'Версия: <b>Forge 1.20.1</b>\n\n'
+		'<a href="https://ely.by/load"><b>Установить лаунчер 🕋</b></a>\n'
+		'<a href="https://drive.google.com/drive/folders/1FeAl_gZMba6EOyipk3RIBqmJjLEiP9Db"><b>Установить моды 🍱</b></a>'
     )
 
 
@@ -78,7 +81,7 @@ async def all_players(players: list[UserDC]) -> str:
         is_admin = await logic.is_admin(p.id)
         is_super = await logic.is_admin(p.id, is_super=True)
         icon = '👑' if is_super else '🛠️' if is_admin else '👤'
-        access = '🔒' if p.whitelisted_till is None else f'🗝️ ({p.whitelisted_till.strftime("%d.%m.%Y")})'
+        access = '🔒' if p.access is None else f'🗝️ ({p.access.whitelisted_till.strftime("%d.%m.%Y")})'
         p_text.append(f'{icon} <code>{p.nick}</code> - ' + (f'@{p.username}' if p.username else f'<a href="tg://user?id={p.id}">{p.first_name}</a>') + f' {access}\n')
     p_text = logic.sort_users_by_icon(p_text)
     for p in p_text:

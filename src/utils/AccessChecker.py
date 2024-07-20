@@ -54,8 +54,8 @@ class AccessChecker:
                 users = (await s.execute(select(User))).all()
                 for u in users:
                     u: User = u[0]
-                    if u.whitelisted_till < datetime.now():
-                        u.whitelisted_till = None
+                    if u.access and u.access.whitelisted_till < datetime.now():
+                        u.access = None
                         await self.rcon.send_cmd(f'whitelist remove {u.nick}')
                         await self.__send_warning(u.id)
                 await s.commit()

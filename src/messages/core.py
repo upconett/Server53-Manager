@@ -4,6 +4,7 @@ from datetime import datetime
 
 # Локальные модули
 from config import BOT_USERNAME
+from database.dataclasses import Access as AccessDC
 
 
 # Простые тексты
@@ -34,6 +35,14 @@ access_warning = (
 )
 
 
+leave_1 = (
+	'<b>Выход из Ely.by 🚪</b>\n\n'
+	'Вы собираетесь выйти из аккаунта?\n'
+	'Учтите что проходка привязывается к нику Ely.by, поэтому вы <u>не сможете перенести</u> её между аккаунтами!\n\n'
+	'<blockquote>Возможность поменять ник с сохранением проходки скорее всего появится в будущем\n\nОтправьте <b><u>даешь проходку</u></b> чтобы пнуть разрабов 💢</blockquote>'
+)
+
+
 # Конфигурируемые тексты
 def start_unreg(user: User) -> str:
 	return (
@@ -51,12 +60,15 @@ def start_logged(nick: str, pr_text: str | None) -> str:
 		f'<b>С возвращением, {nick} 😄</b>\n\n'
 		'Адрес сервера всё тот же:\n'
 		'<code>mc.server53.ru</code>\n\n'
-		f'{pr}'
+		f'{pr}\n\n'
+		'Версия: <b>Forge 1.20.1</b>\n\n'
+		'<a href="https://ely.by/load"><b>Установить лаунчер 🕋</b></a>\n'
+		'<a href="https://drive.google.com/drive/folders/1FeAl_gZMba6EOyipk3RIBqmJjLEiP9Db"><b>Установить моды 🍱</b></a>'
 	)
 
 
-def access(whitelisted_till: datetime | None) -> str:
-	payd = f'Вы оплатили проходку до {whitelisted_till.strftime("%d.%m.%Y")} 🔓' if whitelisted_till else 'Вы не оплачивали проходку 🔒'
+def access(access: AccessDC | None) -> str:
+	payd = f'Вы оплатили проходку до {access.whitelisted_till.strftime("%d.%m.%Y")} 🔓' if access else 'Вы не оплачивали проходку 🔒'
 	return (
 		'<b>Проходка 🗝️</b>\n\n'
 		f'{payd}\n\n'

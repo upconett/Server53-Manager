@@ -27,7 +27,7 @@ async def pre_checkout(pre_checkout_query: PreCheckoutQuery, user: User, state: 
         was_whitelisted = await logic_core.add_to_whitelist(user)
 
         u = await logic_core.get_user_data(user)
-        data['access_till'] = u.whitelisted_till.strftime('%d.%m.%Y')
+        data['access_till'] = u.access.whitelisted_till.strftime('%d.%m.%Y') if u.access else None
         data['was_whitelisted'] = was_whitelisted
         await state.set_data(data)
         await pre_checkout_query.answer(ok=True)

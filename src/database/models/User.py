@@ -1,9 +1,10 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import func
 from aiogram.types import User as AIOgramUser
 from datetime import datetime, timedelta
 
 from .BaseModel import BaseModel
+from .Access import Access
 
 
 class User(BaseModel):
@@ -18,7 +19,9 @@ class User(BaseModel):
     uuid: Mapped[str | None]
     nick: Mapped[str | None]
 
-    whitelisted_till: Mapped[datetime | None] = mapped_column(default=None)
+    access: Mapped[Access] = relationship(
+        cascade='all, delete-orphan', lazy='selectin'
+    )
 
     # Позволено ли человеку пользоваться ботом
     allowed: Mapped[bool] = mapped_column(default=True)
@@ -39,11 +42,9 @@ class User(BaseModel):
         self.uuid = uuid
         self.nick = nick
 
-    async def create_time(self, months: int) -> None:
-        self.whitelisted_till = datetime.now() + timedelta(days=31 * months)
-
-    async def add_time(self, months: int) -> None:
-        self.whitelisted_till += timedelta(days=31 * months)
+    async def leave(self) -> None:
+        self.uuid = None
+        self.nick = None
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, username={self.username!r}, nick={self.nick!r})"

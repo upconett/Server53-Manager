@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 # Локальные модули
 from database import engine
-from database.models import User
+from database.models import User, Access
 
 
 # Функции
@@ -13,9 +13,9 @@ async def buy_access(user: AIOgramUser, months: int):
     async with AsyncSession(engine) as s:
         u = await s.get(User, {'id': user.id})
 
-        if u.whitelisted_till is not None:
-            await u.add_time(months)
+        if u.access is not None:
+            await u.access.add_time(months)
         else:
-            await u.create_time(months)
-        
+            u.access = Access(months)
+
         await s.commit()

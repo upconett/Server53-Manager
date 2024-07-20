@@ -8,7 +8,7 @@ import aiofiles
 # Локальные модули
 from create_bot import rcon
 from database import engine
-from database.models import User
+from database.models import User, Access
 from database.dataclasses import User as UserDC
 from utils.exceptions import NoUserWithNick, IsSuperAdmin
 
@@ -104,11 +104,11 @@ async def give_access(nick: str) -> bool:
         if len(res) == 0:
             raise NoUserWithNick()
         u: User = res[0][0]
-        if u.whitelisted_till:
-            await u.add_time(1)
+        if u.access:
+            await u.access.add_time(1)
             result = True
         else:
-            await u.create_time(1)
+            u.access = Access()
             result = False
         await s.commit()
     await rcon.send_cmd(f'whitelist add {nick}')
@@ -121,7 +121,7 @@ async def remove_access(nick: str) -> None:
         if len(res) == 0:
             raise NoUserWithNick()
         u: User = res[0][0]
-        u.whitelisted_till = None
+        u.access = None
         await s.commit()
     await rcon.send_cmd(f'whitelist remove {nick}')
         

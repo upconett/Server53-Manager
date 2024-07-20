@@ -70,3 +70,8 @@ async def access() -> InlineKeyboardMarkup:
 back = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Вернуться', callback_data='back')]
 ])
+
+leave = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='Выйти из Ely.by', callback_data='leave')],
+    [InlineKeyboardButton(text='Вернуться', callback_data='back')]
+])

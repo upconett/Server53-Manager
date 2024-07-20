@@ -66,7 +66,14 @@ async def authorize_user(user: AIOgramUser, uuid: str, nick: str) -> None:
         if u.nick:
             raise AlreadyRegistered()
         await u.authorize(uuid, nick)
-        print(u)
+        await s.commit()
+
+    
+async def leave_user(user: AIOgramUser) -> None:
+    async with AsyncSession(engine) as s:
+        u = await s.get(User, {'id': user.id})
+        if not u.nick: return
+        await u.leave()
         await s.commit()
 
 
