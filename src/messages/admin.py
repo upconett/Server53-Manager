@@ -95,11 +95,16 @@ def no_user_with_nick(nick: str) -> str:
     return f'У нас нет игрока с ником <code>{nick}</code> ❌'
 
 
-def access_granted(nick: str, result_code: bool) -> str:
+def access_granted(nick: str, result_code: bool, days: int = 31) -> str:
+    d = days % 10
+    if d == 1: d_str = 'день'
+    if 2 <= d <= 4: d_str = 'дня'
+    else: d_str = 'дней'
+
     if result_code:
-        return f'Проходка для <code>{nick}</code> продлена ✅'
+        return f'Проходка для <code>{nick}</code> продлена на {days} {d_str} ✅'
     else:
-        return f'Проходка выдана игроку <code>{nick}</code> ✅'
+        return f'Проходка выдана игроку <code>{nick}</code> на {days} {d_str} ✅'
 
 
 def access_removed(nick: str) -> str:

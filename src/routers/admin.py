@@ -85,12 +85,23 @@ async def query_players_online(query: CallbackQuery):
 
 
 @router.message(Command('access'), F.text.count(' ') > 0)
-async def command_give_access(message: Message):
-    nick = message.text.split()[1]
+async def command_give_access(message: Message, user: User):
+    args = message.text.split()
+    if len(args) <= 1:
+        return
+    if len(args) == 2: 
+        nick = args[1]
+        days = 31
+    if len(args) == 3:
+        nick = args[1]
+        try:
+            days = int(args[2])
+        except:
+            return
     try:
-        res_code = await logic.give_access(nick)
+        res_code = await logic.give_access(nick, days)
         await message.answer(
-            text=ms.access_granted(nick, res_code),
+            text=ms.access_granted(nick, res_code, days),
             reply_markup=kb_core.back
         )
         await message.delete()

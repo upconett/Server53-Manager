@@ -97,7 +97,7 @@ def sort_users_by_icon(users: list[str]) -> list[str]:
     return sorted(users, key=sort_key)
 
 
-async def give_access(nick: str) -> bool:
+async def give_access(nick: str, days: int = 31) -> bool:
     result = False
     async with AsyncSession(engine) as s:
         res = (await s.execute(select(User).where(User.nick == nick))).all()
@@ -105,7 +105,7 @@ async def give_access(nick: str) -> bool:
             raise NoUserWithNick()
         u: User = res[0][0]
         if u.access:
-            await u.access.add_time(1)
+            await u.access.add_time(days)
             result = True
         else:
             u.access = Access()

@@ -16,12 +16,12 @@ class Access(BaseModel):
     nick: Mapped[str] = mapped_column(ForeignKey('users.nick', ondelete='CASCADE'))
     whitelisted_till: Mapped[datetime | None] = mapped_column(default=func.now())
 
-    def __init__(self, months: int = 1):
+    def __init__(self, days: int = 31):
         super().__init__()
-        self.whitelisted_till = datetime.now() + timedelta(days=31*months)
+        self.whitelisted_till = datetime.now() + timedelta(days=days)
 
-    async def add_time(self, months: int = 1) -> None:
-        self.whitelisted_till += timedelta(days=31*months)
+    async def add_time(self, days: int = 31) -> None:
+        self.whitelisted_till += timedelta(days=days)
 
     def __repr__(self) -> str:
         return f"Access(id={self.id!r}, nick={self.nick!r}, whitelisted_till={self.whitelisted_till.strftime('%d.%m.%Y')!r})"
