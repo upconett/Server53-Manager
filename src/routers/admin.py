@@ -68,6 +68,8 @@ async def message_admin_panel(query: CallbackQuery, user: User):
 
 @router.callback_query(F.data == 'admin_online')
 async def query_players_online(query: CallbackQuery):
+    await check_mcrcon(rcon, query.message)
+    print('checked')
     online = await logic.get_players(online=True)
     await query.message.edit_text(
         text=await ms.online(online),
@@ -76,7 +78,8 @@ async def query_players_online(query: CallbackQuery):
 
 
 @router.callback_query(F.data == 'admin_players')
-async def query_players_online(query: CallbackQuery):
+async def query_players_all(query: CallbackQuery):
+    await check_mcrcon(rcon, query.message)
     players = await logic.get_players()
     await query.message.edit_text(
         text=await ms.all_players(players),
@@ -86,6 +89,7 @@ async def query_players_online(query: CallbackQuery):
 
 @router.message(Command('access'), F.text.count(' ') > 0)
 async def command_give_access(message: Message, user: User):
+    await check_mcrcon(rcon)
     args = message.text.split()
     if len(args) <= 1:
         return
@@ -115,6 +119,7 @@ async def command_give_access(message: Message, user: User):
 
 @router.message(Command('remove_access'), F.text.count(' ') > 0)
 async def command_remove_access(message: Message):
+    await check_mcrcon(rcon)
     nick = message.text.split()[1]
     try:
         await logic.remove_access(nick)

@@ -74,12 +74,14 @@ async def get_players(online: bool = False) -> list[UserDC]:
     result = []
     async with AsyncSession(engine) as s:
         if online:
-            players = await rcon.send_cmd('list')
+            players = (await rcon.send_cmd('list'))[0]
+            players = ': '.join(players.replace('\n', '').split(': ')[1:]).split(', ')
             for p in players:
                 u = await s.execute(select(User).where(User.nick == p))
-                if len(u.all()) == 0:
+                a = u.all()
+                if len(a) == 0:
                     continue
-                result.append(UserDC(u.all()[0][0]))
+                result.append(UserDC(a[0][0]))
         else:
             players = await s.execute(select(User))
             result = [UserDC(u[0]) for u in players.all()]

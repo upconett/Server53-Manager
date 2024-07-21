@@ -2,6 +2,8 @@
 from aiomcrcon import RCONConnectionError, ClientNotConnectedError
 
 import functools
+from aiogram.types import Message
+from aiomcrcon import Client
 
 
 # Функции
@@ -26,20 +28,26 @@ import functools
 #     return wrapper
 
 
-async def check_mcrcon(rcon):
+async def check_mcrcon(rcon: Client, message: Message | None = None):
     try:
-        await rcon.send_cmd("checkconnection")
-    except ClientNotConnectedError:
-        print("Подключение к mcrcon было разорвано.")
-
         try:
-            await rcon.connect()
+            await rcon.send_cmd("checkconnection")
+        except ClientNotConnectedError:
+            print("Подключение к mcrcon было разорвано.")
 
-            print("Подключение к mcrcon установлено.")
-        except RCONConnectionError as e:
-            print(f"Ошибка подключения к mcrcon: {e}")
+            try:
+                await rcon.connect()
 
-            return
+                print("Подключение к mcrcon установлено.")
+            except RCONConnectionError as e:
+                print(f"Ошибка подключения к mcrcon: {e}")
+
+                return
+    except:
+        if message:
+            await message.answer(
+                'Проблема подключения к серверу, напишите @SteePT и @ppljc!'
+            )
 
 
 async def whitelist_get(rcon) -> list:

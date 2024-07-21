@@ -63,7 +63,7 @@ async def online(players: list[UserDC]) -> str:
         is_admin = await logic.is_admin(p.id)
         is_super = await logic.is_admin(p.id, is_super=True)
         icon = '👑' if is_super else '🛠️' if is_admin else '👤'
-        p_text.append(f'{icon} <code>{p.nick}</code> - <a href="tg://user?id={p.id}">{p.username if p.username else p.first_name}</a>\n')
+        p_text.append(f'{icon} <code>{p.nick}</code> - ' + (f'@{p.username}' if p.username else f'<a href="tg://user?id={p.id}">{p.first_name}</a>') + '\n')
     p_text = logic.sort_users_by_icon(p_text)
     for p in p_text:
         message += p
