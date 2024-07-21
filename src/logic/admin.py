@@ -110,7 +110,7 @@ async def give_access(nick: str, days: int = 31) -> bool:
             await u.access.add_time(days)
             result = True
         else:
-            u.access = Access()
+            u.access = Access(days)
             result = False
         await s.commit()
     await rcon.send_cmd(f'whitelist add {nick}')

@@ -22,8 +22,8 @@ async def pre_checkout(pre_checkout_query: PreCheckoutQuery, user: User, state: 
     data = await state.get_data()
     
     try:
-        months = int(pre_checkout_query.invoice_payload.split('_')[0])
-        await logic.buy_access(user, months)
+        days = int(pre_checkout_query.invoice_payload.split('_')[0])
+        await logic.buy_access(user, days)
         was_whitelisted = await logic_core.add_to_whitelist(user)
 
         u = await logic_core.get_user_data(user)

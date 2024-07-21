@@ -56,7 +56,7 @@ async def access() -> InlineKeyboardMarkup:
                 description="Проходка на Server53",
                 prices=prices,
                 provider_token="",
-                payload="1_month_access",
+                payload="31_days_access",
                 currency="XTR",
             )
         )
