@@ -68,8 +68,8 @@ async def message_admin_panel(query: CallbackQuery, user: User):
 
 @router.callback_query(F.data == 'admin_online')
 async def query_players_online(query: CallbackQuery):
-    await check_mcrcon(rcon, query.message)
-    print('checked')
+    if not await check_mcrcon(rcon, query.message):
+        return
     online = await logic.get_players(online=True)
     await query.message.edit_text(
         text=await ms.online(online),
@@ -79,7 +79,8 @@ async def query_players_online(query: CallbackQuery):
 
 @router.callback_query(F.data == 'admin_players')
 async def query_players_all(query: CallbackQuery):
-    await check_mcrcon(rcon, query.message)
+    if not await check_mcrcon(rcon, query.message):
+        return
     players = await logic.get_players()
     await query.message.edit_text(
         text=await ms.all_players(players),
@@ -89,7 +90,8 @@ async def query_players_all(query: CallbackQuery):
 
 @router.message(Command('access'), F.text.count(' ') > 0)
 async def command_give_access(message: Message, user: User):
-    await check_mcrcon(rcon)
+    if not await check_mcrcon(rcon, message):
+        return
     args = message.text.split()
     if len(args) <= 1:
         return
@@ -119,7 +121,8 @@ async def command_give_access(message: Message, user: User):
 
 @router.message(Command('remove_access'), F.text.count(' ') > 0)
 async def command_remove_access(message: Message):
-    await check_mcrcon(rcon)
+    if not await check_mcrcon(rcon, message):
+        return
     nick = message.text.split()[1]
     try:
         await logic.remove_access(nick)
@@ -138,7 +141,8 @@ async def command_remove_access(message: Message):
 
 @router.message(Command('ban'), F.text.count(' ') > 0)
 async def command_ban(message: Message):
-    await check_mcrcon(rcon)
+    if not await check_mcrcon(rcon, message):
+        return
 
     nick = message.text.split()[1]
     reason = ' '.join(message.text.split()[2:])
@@ -158,7 +162,8 @@ async def command_ban(message: Message):
 
 @router.message(Command('unban'), F.text.count(' ') > 0)
 async def command_unban(message: Message):
-    await check_mcrcon(rcon)
+    if not await check_mcrcon(rcon, message):
+        return
 
     nick = message.text.split()[1]
     if not await logic.is_user(nick):
@@ -177,6 +182,9 @@ async def command_unban(message: Message):
 
 @router.message(Command('admin'), F.text.count(' ') > 0)
 async def command_admin(message: Message):
+    if not await check_mcrcon(rcon, message):
+        return
+
     nick = message.text.split()[1]
     try:
         await logic.add_admin(nick)
@@ -195,6 +203,9 @@ async def command_admin(message: Message):
 
 @router.message(Command('super_admin'), F.text.count(' ') > 0)
 async def command_super_admin(message: Message):
+    if not await check_mcrcon(rcon, message):
+        return
+
     nick = message.text.split()[1]
     try:
         await logic.add_admin(nick, is_super=True)
@@ -213,10 +224,13 @@ async def command_super_admin(message: Message):
 
 @router.message(Command('remove_admin'), F.text.count(' ') > 0)
 async def command_remove_admin(message: Message):
+    if not await check_mcrcon(rcon, message):
+        return
+
     nick = message.text.split()[1]
     try:
         await logic.remove_admin(nick)
-        await rcon.send_cmd(f'op {nick}')
+        await rcon.send_cmd(f'deop {nick}')
         await message.answer(
             text=ms.unadminned(nick),
             reply_markup=kb_core.back
@@ -257,7 +271,7 @@ async def command_block(message: Message):
 
 
 @router.message(Command('unblock'), F.text.count(' ') > 0)
-async def command_block(message: Message):
+async def command_unblock(message: Message):
     nick = message.text.split()[1]
     try:
         await logic.unblock_user(nick)
