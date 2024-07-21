@@ -1,53 +1,24 @@
 # Python модули
-from aiomcrcon import RCONConnectionError, ClientNotConnectedError
-
-import functools
+from aiomcrcon import RCONConnectionError, ClientNotConnectedError, Client
 from aiogram.types import Message
-from aiomcrcon import Client
 
 
 # Функции
-# def check_mcrcon(func):
-#     @functools.wraps(func)
-#     async def wrapper(rcon, *args, **kwargs):
-#         try:
-#             await rcon.send_cmd("checkconnection")
-#         except ClientNotConnectedError:
-#             print("Подключение к mcrcon было разорвано.")
-#
-#             try:
-#                 await rcon.connect()
-#
-#                 print("Подключение к mcrcon установлено.")
-#             except RCONConnectionError as e:
-#                 print(f"Ошибка подключения к mcrcon: {e}")
-#
-#                 return
-#
-#         return await func(*args, **kwargs)
-#     return wrapper
-
-
 async def check_mcrcon(rcon: Client, message: Message | None = None):
     try:
-        try:
-            await rcon.send_cmd("checkconnection")
-        except ClientNotConnectedError:
-            print("Подключение к mcrcon было разорвано.")
-
-            try:
-                await rcon.connect()
-
-                print("Подключение к mcrcon установлено.")
-            except RCONConnectionError as e:
-                print(f"Ошибка подключения к mcrcon: {e}")
-
-                return
+        await rcon.send_cmd("checkconnection")
+        return True
     except:
-        if message:
-            await message.answer(
-                'Проблема подключения к серверу, напишите @SteePT и @ppljc!'
-            )
+        print("Подключение к mcrcon было разорвано.")
+        try:
+            await rcon.connect()
+            print("Подключение к mcrcon установлено.")
+            return True
+        except Exception as e:
+            print(f"Ошибка подключения к mcrcon: {e}")
+            if message:
+                await message.answer(text='Проблема подключения к серверу, напишите @SteePT и @ppljc!')
+            return False
 
 
 async def whitelist_get(rcon) -> list:
